@@ -1,0 +1,60 @@
+# {{ORG_NAME}} - Claude Instructions
+
+This directory contains {{DESCRIPTION}}.
+
+## Session Protocol
+
+### On Session Start
+1. Read `HANDOVER.md` for context from previous sessions
+2. Read `PROGRESS.md` for current project status
+3. Identify which repos are relevant to your task
+
+### During Work
+- Use consistent branch names: `{{BRANCH_PATTERN}}`
+- Document insights and learnings as you discover them
+- Update PROGRESS.md with completed tasks
+
+### On Session End / Handoff
+
+**MANDATORY:** Before ending any session, update tracking files.
+
+If using `/handover` skill:
+```
+/handover
+```
+
+Otherwise manually:
+1. Add session entry to `PROGRESS.md`
+2. Update `HANDOVER.md` if cross-repo context needed
+3. Note any reflections worth preserving
+
+## Repository Notes
+
+| Repo | Purpose | Notes |
+|------|---------|-------|
+| {{REPO_1}} | {{PURPOSE_1}} | {{NOTES_1}} |
+| {{REPO_2}} | {{PURPOSE_2}} | {{NOTES_2}} |
+| {{REPO_3}} | {{PURPOSE_3}} | {{NOTES_3}} |
+
+## Common Commands
+
+```bash
+# Check status across all repos
+for d in */; do echo "=== $d ===" && git -C "$d" status -sb 2>/dev/null; done
+
+# Pull all repos
+for d in */; do git -C "$d" pull 2>/dev/null; done
+
+# Find uncommitted changes
+for d in */; do
+  changes=$(git -C "$d" status --porcelain 2>/dev/null | wc -l)
+  [ "$changes" -gt 0 ] && echo "$d: $changes uncommitted"
+done
+```
+
+## Guidelines
+- Never push directly to main/master
+- Create feature branches and PRs
+- Document learnings and discoveries
+- {{CUSTOM_GUIDELINE_1}}
+- {{CUSTOM_GUIDELINE_2}}

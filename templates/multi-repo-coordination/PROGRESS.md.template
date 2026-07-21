@@ -1,0 +1,143 @@
+# {{ORG_NAME}} Progress
+
+Cross-repository progress tracking for {{DESCRIPTION}}.
+
+---
+
+## Active Initiatives
+
+### {{INITIATIVE_NAME}}
+- **Status**: {{STATUS}}
+- **Owner**: {{OWNER}}
+- **Repos**: {{REPOS}}
+- **Branch**: `{{BRANCH}}`
+- **Started**: {{DATE}}
+
+#### Progress
+- [ ] {{TASK_1}}
+- [ ] {{TASK_2}}
+- [ ] {{TASK_3}}
+
+#### Blockers
+- {{BLOCKER_OR_NONE}}
+
+---
+
+## Introspection Log
+
+*Track feelings, energy, and insights alongside work.*
+
+### Template
+
+```markdown
+### [Date] [Time] - Energy: [High/Medium/Low]
+
+**Mood/State**: [How I'm feeling]
+
+**Worked on**:
+-
+
+**What clicked**:
+-
+
+**What felt hard**:
+-
+
+**Energy observations**:
+-
+
+**Insights worth keeping**:
+-
+```
+
+### Recent Entries
+
+*(Add new entries at the top)*
+
+---
+
+## Session History
+
+### {{DATE}} {{TIME}} - {{AGENT}} - {{SESSION_TITLE}}
+
+#### Completed
+- [x] {{COMPLETED_1}}
+- [x] {{COMPLETED_2}}
+
+#### Files Changed
+- `{{FILE_1}}` - {{DESCRIPTION_1}}
+- `{{FILE_2}}` - {{DESCRIPTION_2}}
+
+#### Discoveries
+- {{DISCOVERY_1}}
+- {{DISCOVERY_2}}
+
+#### Branch
+- `{{BRANCH}}`
+
+#### PR
+- {{PR_URL_OR_NA}}
+
+---
+
+## Repository Status
+
+| Repo | Purpose | Status | Last Active |
+|------|---------|--------|-------------|
+| {{REPO_1}} | {{PURPOSE_1}} | {{STATUS_1}} | {{DATE_1}} |
+| {{REPO_2}} | {{PURPOSE_2}} | {{STATUS_2}} | {{DATE_2}} |
+
+---
+
+## Weekly Reflection Template
+
+### Week of [Date]
+
+**Energy Map**
+| Day | Energy | Primary Focus | Notes |
+|-----|--------|---------------|-------|
+| Mon | | | |
+| Tue | | | |
+| Wed | | | |
+| Thu | | | |
+| Fri | | | |
+| Sat | | | |
+| Sun | | | |
+
+**What I learned**:
+-
+
+**What confused me**:
+-
+
+**What I want to learn next**:
+-
+
+**Patterns noticed**:
+-
+
+**Blockers (technical, emotional, motivational)**:
+-
+
+---
+
+## Cross-Repo PRs
+
+| Feature | Repos | PRs | Status |
+|---------|-------|-----|--------|
+| | | | |
+
+---
+
+## Architectural Decisions Log
+
+| ADR | Title | Status | Date |
+|-----|-------|--------|------|
+| | | | |
+
+---
+
+## Notes
+
+- {{NOTE_1}}
+- {{NOTE_2}}

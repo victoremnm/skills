@@ -1,0 +1,106 @@
+# Agent Handover Notes
+
+Cross-repository coordination file for {{ORG_NAME}}.
+
+---
+
+## Active Work
+
+### Current Session
+- **Agent**: {{AGENT_NAME}}
+- **Working on**: {{CURRENT_TASK}}
+- **Repos touched**: {{REPOS}}
+- **Branch**: `{{BRANCH_NAME}}`
+- **Status**: {{STATUS}}
+
+---
+
+## Pending Coordination
+
+| Task | Source Repo | Target Repo | Status | Notes |
+|------|-------------|-------------|--------|-------|
+| | | | | |
+
+---
+
+## Reflections to Stew On
+
+*Patterns, questions, and insights worth sitting with. Not urgent to resolve.*
+
+### Patterns Worth Extracting
+
+| Pattern | Seen In | Could Become |
+|---------|---------|--------------|
+| | | |
+
+### Open Questions
+
+1.
+2.
+3.
+
+### Energy Observations
+
+| Context | Energy Level | Notes |
+|---------|-------------|-------|
+| | | |
+
+---
+
+## Recent Decisions
+
+### {{DATE}}
+- **Decision**: {{DECISION}}
+- **Rationale**: {{RATIONALE}}
+- **Affects**: {{AFFECTED_REPOS}}
+
+---
+
+## Cross-Repo Dependencies
+
+| Producer Repo | Consumer Repo | Interface | Notes |
+|---------------|---------------|-----------|-------|
+| | | | |
+
+---
+
+## Context for Next Agent
+
+### Architecture Overview
+
+```
+{{ARCHITECTURE_DESCRIPTION}}
+```
+
+### Common Patterns
+- Branch naming: `{{BRANCH_PATTERN}}`
+- PRs target: `{{DEFAULT_BRANCH}}`
+- {{CUSTOM_PATTERN_1}}
+
+### Environment Notes
+- {{ENV_NOTE_1}}
+
+---
+
+## Session Log
+
+### {{DATE}} - {{AGENT}} - {{TASK_TITLE}}
+
+- **Task**: {{TASK_DESCRIPTION}}
+- **Repos**: {{REPOS}}
+- **Outcome**: {{OUTCOME}}
+
+#### Key Actions
+- {{ACTION_1}}
+- {{ACTION_2}}
+
+#### Learnings
+- {{LEARNING_1}}
+
+---
+
+**Instructions**: Update this file when:
+1. Starting work that spans multiple repos
+2. Making architectural decisions
+3. Handing off to another agent/session
+4. Noticing patterns worth reflecting on

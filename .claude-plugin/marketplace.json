@@ -1,0 +1,23 @@
+{
+  "name": "victoremnm",
+  "owner": {
+    "name": "Victor Em",
+    "url": "https://github.com/victoremnm"
+  },
+  "description": "Portable, repo-agnostic agent workflow skills as an installable Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "skills",
+      "source": "./",
+      "description": "Portable workflow skills for AI coding assistants — staged execution, background checks, parallel exploration, session handoff, docs audit, security scanning, and PR-feedback resolution.",
+      "category": "engineering",
+      "keywords": [
+        "engineering",
+        "skills",
+        "workflow",
+        "code-review",
+        "automation"
+      ]
+    }
+  ]
+}

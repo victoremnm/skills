@@ -1,0 +1,28 @@
+{
+  "name": "skills",
+  "version": "1.0.0",
+  "description": "Portable workflow skills for AI coding assistants — staged execution, background checks, parallel exploration, session handoff, docs audit, security scanning, and PR-feedback resolution.",
+  "author": {
+    "name": "Victor Em",
+    "url": "https://github.com/victoremnm"
+  },
+  "homepage": "https://github.com/victoremnm/skills",
+  "repository": "https://github.com/victoremnm/skills",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "skills",
+    "workflow",
+    "code-review",
+    "automation"
+  ],
+  "skills": [
+    "./skills/address-feedback",
+    "./skills/agent-chain",
+    "./skills/background-runner",
+    "./skills/parallel-explore",
+    "./skills/personal-handover",
+    "./skills/repo-docs-audit",
+    "./skills/security-scrub"
+  ]
+}

@@ -1,0 +1,14 @@
+.claude/
+.agents/
+.codex/
+
+.DS_Store
+.env
+.env.*
+.direnv/
+
+.vscode/
+.idea/
+
+dist/
+*.log
