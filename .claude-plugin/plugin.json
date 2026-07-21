@@ -23,6 +23,8 @@
     "./skills/parallel-explore",
     "./skills/personal-handover",
     "./skills/repo-docs-audit",
-    "./skills/security-scrub"
+    "./skills/security-scrub",
+    "./skills/watch-pr",
+    "./skills/idle-pickup"
   ]
 }
