@@ -1,6 +1,7 @@
 ---
 name: security-scrub
-description: Run a grep-based security audit on changed files before pushing. Use when the user asks for a security scrub, secret scan, pre-push check, or wants a quick review of changed files for obvious security issues.
+description: Run a grep-based security audit on changed files before pushing. USE WHEN the user says "security scrub", "secret scan", "pre-push check", "scan for secrets", OR wants a quick review of changed files for obvious security issues.
+version: 1.0.0
 ---
 
 # Security Scrub
@@ -49,3 +50,9 @@ SCAN="$HOME/.claude/skills/security-scrub/scan.sh"
 EOF
 chmod +x .git/hooks/pre-push
 ```
+
+## Not this skill
+
+- Not a full dependency or supply-chain audit; it is grep-based and scoped to obvious secrets/patterns.
+- Not for code-quality or review feedback; that is [`address-feedback`](./address-feedback/SKILL.md) and [`watch-pr`](./watch-pr/SKILL.md).
+- Not for documentation scaffolding; that is [`repo-docs-audit`](./repo-docs-audit/SKILL.md).

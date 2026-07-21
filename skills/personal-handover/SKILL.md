@@ -1,6 +1,7 @@
 ---
 name: personal-handover
-description: Update HANDOVER.md and PROGRESS.md from recent git activity across repositories. Use when the user asks for a handover, session wrap-up, progress update, or cross-repo status summary.
+description: Update HANDOVER.md and PROGRESS.md from recent git activity across repositories. USE WHEN the user asks for a "handover", "session wrap-up", "progress update", "what did I do today", OR a cross-repo status summary.
+version: 1.0.0
 ---
 
 # Personal Handover
@@ -36,3 +37,9 @@ done
 - files or repos touched
 - blockers
 - next steps
+
+## Not this skill
+
+- Not for scaffolding repo documentation; that is [`repo-docs-audit`](./repo-docs-audit/SKILL.md).
+- Not for searching code across repos; that is [`parallel-explore`](./parallel-explore/SKILL.md).
+- Not for addressing review feedback or watching PRs; those are [`address-feedback`](./address-feedback/SKILL.md) and [`watch-pr`](./watch-pr/SKILL.md).

@@ -1,6 +1,7 @@
 ---
 name: parallel-explore
-description: Search across multiple repositories or investigate several hypotheses in parallel. Use when the user asks where something lives, why something is broken, or wants fast context gathering across repos.
+description: Search across multiple repositories or investigate several hypotheses in parallel. USE WHEN the user asks "where is X", "why is Y broken", "find all places Z happens", "search across repos", OR wants fast context gathering across repos or hypotheses.
+version: 1.0.0
 ---
 
 # Parallel Explore
@@ -32,3 +33,9 @@ Use parallel exploration when the task is search-heavy and the answer may live i
 - Do not duplicate the same search locally and in spawned work.
 - Prefer one explorer per repo or per hypothesis.
 - Stop once you have enough signal to choose the next step.
+
+## Not this skill
+
+- Not for implementing fixes; hand findings to [`agent-chain`](./agent-chain/SKILL.md) or [`multi-agent-pr-review`](./multi-agent-pr-review/SKILL.md) for execution.
+- Not a staged workflow; if the task needs explore → plan → implement, use [`agent-chain`](./agent-chain/SKILL.md) and use this skill inside its explore phase.
+- Not for running long commands; that is [`background-runner`](./background-runner/SKILL.md).

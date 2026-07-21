@@ -1,6 +1,7 @@
 ---
 name: agent-chain
-description: Break complex work into staged explore, plan, and implement phases with explicit handoff artifacts. Use when a task is multi-step, benefits from sequencing, or needs a clear artifact between stages.
+description: Break complex work into staged explore, plan, and implement phases with explicit handoff artifacts. USE WHEN the task is multi-step, benefits from sequencing, spans several files, or needs a clear artifact between stages.
+version: 1.0.0
 ---
 
 # Agent Chain
@@ -34,3 +35,9 @@ Use this when one agent should not carry the whole task context.
 - Do not repeat the full task in every file.
 - If exploration is uncertain, stop the chain before implementation.
 - If the task is small, skip the chain and just do the work.
+
+## Not this skill
+
+- Not for one-shot or trivial tasks — just do those directly.
+- Not the multi-change, multi-agent fan-out layer; that is [`multi-agent-pr-review`](./multi-agent-pr-review/SKILL.md).
+- Not a search tool; use [`parallel-explore`](./parallel-explore/SKILL.md) inside the explore phase when you need parallel investigation.
