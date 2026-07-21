@@ -63,10 +63,12 @@ Skills trigger automatically based on their descriptions. Examples:
 | [`address-feedback`](skills/address-feedback/SKILL.md) | resolve automated PR review feedback (CodeRabbit, Copilot, Codex, Claude, Vercel Toolbar) to zero open threads |
 | [`agent-chain`](skills/agent-chain/SKILL.md) | staged explore → plan → implement workflows |
 | [`background-runner`](skills/background-runner/SKILL.md) | long-running checks without blocking |
+| [`idle-pickup`](skills/idle-pickup/SKILL.md) | use idle time — cheap subagents pick up ready issues and review open PRs, gated to draft PRs |
 | [`parallel-explore`](skills/parallel-explore/SKILL.md) | bounded parallel codebase search |
 | [`personal-handover`](skills/personal-handover/SKILL.md) | session wrap-up across repos |
 | [`repo-docs-audit`](skills/repo-docs-audit/SKILL.md) | find missing docs and scaffolding |
 | [`security-scrub`](skills/security-scrub/SKILL.md) | fast pre-push security scan |
+| [`watch-pr`](skills/watch-pr/SKILL.md) | autonomously poll a PR for reviewer feedback and drive every thread to resolved |
 
 ## Templates
 
@@ -102,7 +104,8 @@ This repo keeps only broadly reusable workflow skills:
 - repo documentation hygiene
 - session handoff
 - lightweight security scanning
-- PR-feedback resolution
+- PR-feedback resolution and autonomous PR watching
+- idle-time backlog work via cheap subagents
 
 Private or company-specific skills live elsewhere.
 
