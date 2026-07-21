@@ -8,7 +8,7 @@ version: 1.0.0
 
 An autonomous **watch loop** around a single PR: wait for reviewers, address each new thread, push, and re-poll until the PR is **merge-eligible** (zero unresolved threads, CI green). This skill owns only the *lifecycle* — the cadence, quiescence detection, and exit gate. It **delegates every per-comment decision to `address-feedback`**, which is the single source of truth for triage, fixing, replying, and resolving.
 
-Use `address-feedback` directly for a one-shot pass a human drives. Use `watch-pr` when the PR should be watched to completion hands-off.
+Use `address-feedback` directly for a one-shot pass a human drives. Use `watch-pr` when the PR should be watched to completion hands-off. [`multi-agent-pr-review`](../multi-agent-pr-review/SKILL.md) uses this loop for each PR when orchestrating several parallel changes.
 
 ## Hard Rules
 

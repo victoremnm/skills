@@ -8,7 +8,7 @@ version: 1.0.0
 
 Turn otherwise-wasted idle time into progress: dispatch **cheap subagents** at the current repo's backlog — open issues that are ready, and open PRs that need a review — and bring back **gated proposals**, never merged changes. Runs standalone ("pick up open work") or is invoked by another skill during its waits (e.g. `watch-pr` between reviewer rounds).
 
-The unit of value is a **draft**: a draft PR for an issue, or review suggestions on an open PR. A human (or the main agent) approves before anything ships.
+The unit of value is a **draft**: a draft PR for an issue, or review suggestions on an open PR. A human (or the main agent) approves before anything ships. [`multi-agent-pr-review`](../multi-agent-pr-review/SKILL.md) uses the same issue→PR brief shape for planned, merge-gated work at Sonnet.
 
 ## Hard Rules
 
