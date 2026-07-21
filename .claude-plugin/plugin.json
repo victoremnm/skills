@@ -25,6 +25,7 @@
     "./skills/repo-docs-audit",
     "./skills/security-scrub",
     "./skills/watch-pr",
-    "./skills/idle-pickup"
+    "./skills/idle-pickup",
+    "./skills/multi-agent-pr-review"
   ]
 }

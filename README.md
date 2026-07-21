@@ -64,6 +64,7 @@ Skills trigger automatically based on their descriptions. Examples:
 | [`agent-chain`](skills/agent-chain/SKILL.md) | staged explore → plan → implement workflows |
 | [`background-runner`](skills/background-runner/SKILL.md) | long-running checks without blocking |
 | [`idle-pickup`](skills/idle-pickup/SKILL.md) | use idle time — cheap subagents pick up ready issues and review open PRs, gated to draft PRs |
+| [`multi-agent-pr-review`](skills/multi-agent-pr-review/SKILL.md) | fan-out orchestration — decompose into issues, execute with subagents, review with a stronger model, merge behind a hard gate |
 | [`parallel-explore`](skills/parallel-explore/SKILL.md) | bounded parallel codebase search |
 | [`personal-handover`](skills/personal-handover/SKILL.md) | session wrap-up across repos |
 | [`repo-docs-audit`](skills/repo-docs-audit/SKILL.md) | find missing docs and scaffolding |
