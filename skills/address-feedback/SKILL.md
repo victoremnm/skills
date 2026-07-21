@@ -486,15 +486,15 @@ Addresses CodeRabbit/Copilot/Claude comments"
 
 ## Integration with Other Skills
 
-### Use pr-review-loop for continuous monitoring
+### Use watch-pr for continuous monitoring
 
-`address-feedback` is a **one-shot** pass. When you want to watch a PR until all comments are resolved and CI is green across multiple iterations, use `pr-review-loop` instead:
+`address-feedback` is a **one-shot** pass. When you want to watch a PR until all comments are resolved and CI is green across multiple iterations, use `watch-pr` instead:
 
 ```text
-> /pr-review-loop https://github.com/owner/repo/pull/123
+> watch this PR
 ```
 
-`pr-review-loop` handles: fetch → triage (accept/reject) → fix → push → watch CI → reply → resolve, looping until done. `address-feedback` is for a single explicit addressing pass without the loop.
+`watch-pr` is the autonomous loop: it polls reviewers after every push and, for each new thread, delegates back to this skill's triage — driving to a merge-eligible exit gate (0 unresolved threads + CI green). `address-feedback` is for a single explicit addressing pass without the loop.
 
 ### Do useful work while waiting for CI
 

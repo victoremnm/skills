@@ -6,7 +6,7 @@ version: 1.0.0
 
 # Multi-Agent PR Review
 
-A repeatable loop for shipping several changes with subagents while keeping a human-quality bar. Pairs with `address-feedback` (which handles the comment-resolution mechanics) and `pr-review-loop`.
+A repeatable loop for shipping several changes with subagents while keeping a human-quality bar. Pairs with `address-feedback` (which handles the comment-resolution mechanics) and `watch-pr` (which watches a single PR to its merge gate).
 
 ## The loop
 
@@ -26,4 +26,4 @@ A repeatable loop for shipping several changes with subagents while keeping a hu
 
 ## Not this skill
 
-Single-PR comment resolution mechanics (fetch/reply/resolve/poll-to-zero) live in `address-feedback`. Continuous single-PR CI+review watching lives in `pr-review-loop`. This skill is the fan-out/decompose-and-orchestrate layer above them.
+Single-PR comment resolution mechanics (fetch/reply/resolve/poll-to-zero) live in `address-feedback`. Autonomous single-PR CI+review watching lives in `watch-pr`. Idle-time backlog pickup with cheap subagents lives in `idle-pickup`. This skill is the fan-out/decompose-and-orchestrate layer above them.
