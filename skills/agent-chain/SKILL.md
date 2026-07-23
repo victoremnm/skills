@@ -39,5 +39,5 @@ Use this when one agent should not carry the whole task context.
 ## Not this skill
 
 - Not for one-shot or trivial tasks — just do those directly.
-- Not the multi-change, multi-agent fan-out layer; that is [`multi-agent-pr-review`](./multi-agent-pr-review/SKILL.md).
-- Not a search tool; use [`parallel-explore`](./parallel-explore/SKILL.md) inside the explore phase when you need parallel investigation.
+- Not the multi-change, multi-agent fan-out layer; that is [`multi-agent-pr-review`](../multi-agent-pr-review/SKILL.md).
+- Not a search tool; use [`parallel-explore`](../parallel-explore/SKILL.md) inside the explore phase when you need parallel investigation.

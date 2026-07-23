@@ -32,5 +32,5 @@ Use this for non-interactive commands that may take a while.
 ## Not this skill
 
 - Not for interactive or stepwise commands that need human input mid-run.
-- Not an autonomous PR polling loop; that is [`watch-pr`](./watch-pr/SKILL.md).
-- Not idle-time backlog work; that is [`idle-pickup`](./idle-pickup/SKILL.md).
+- Not an autonomous PR polling loop; that is [`watch-pr`](../watch-pr/SKILL.md).
+- Not idle-time backlog work; that is [`idle-pickup`](../idle-pickup/SKILL.md).

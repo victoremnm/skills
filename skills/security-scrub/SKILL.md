@@ -54,5 +54,5 @@ chmod +x .git/hooks/pre-push
 ## Not this skill
 
 - Not a full dependency or supply-chain audit; it is grep-based and scoped to obvious secrets/patterns.
-- Not for code-quality or review feedback; that is [`address-feedback`](./address-feedback/SKILL.md) and [`watch-pr`](./watch-pr/SKILL.md).
-- Not for documentation scaffolding; that is [`repo-docs-audit`](./repo-docs-audit/SKILL.md).
+- Not for code-quality or review feedback; that is [`address-feedback`](../address-feedback/SKILL.md) and [`watch-pr`](../watch-pr/SKILL.md).
+- Not for documentation scaffolding; that is [`repo-docs-audit`](../repo-docs-audit/SKILL.md).

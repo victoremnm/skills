@@ -40,6 +40,6 @@ done
 
 ## Not this skill
 
-- Not for scaffolding repo documentation; that is [`repo-docs-audit`](./repo-docs-audit/SKILL.md).
-- Not for searching code across repos; that is [`parallel-explore`](./parallel-explore/SKILL.md).
-- Not for addressing review feedback or watching PRs; those are [`address-feedback`](./address-feedback/SKILL.md) and [`watch-pr`](./watch-pr/SKILL.md).
+- Not for scaffolding repo documentation; that is [`repo-docs-audit`](../repo-docs-audit/SKILL.md).
+- Not for searching code across repos; that is [`parallel-explore`](../parallel-explore/SKILL.md).
+- Not for addressing review feedback or watching PRs; those are [`address-feedback`](../address-feedback/SKILL.md) and [`watch-pr`](../watch-pr/SKILL.md).

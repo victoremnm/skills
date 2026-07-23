@@ -36,6 +36,6 @@ Use parallel exploration when the task is search-heavy and the answer may live i
 
 ## Not this skill
 
-- Not for implementing fixes; hand findings to [`agent-chain`](./agent-chain/SKILL.md) or [`multi-agent-pr-review`](./multi-agent-pr-review/SKILL.md) for execution.
-- Not a staged workflow; if the task needs explore → plan → implement, use [`agent-chain`](./agent-chain/SKILL.md) and use this skill inside its explore phase.
-- Not for running long commands; that is [`background-runner`](./background-runner/SKILL.md).
+- Not for implementing fixes; hand findings to [`agent-chain`](../agent-chain/SKILL.md) or [`multi-agent-pr-review`](../multi-agent-pr-review/SKILL.md) for execution.
+- Not a staged workflow; if the task needs explore → plan → implement, use [`agent-chain`](../agent-chain/SKILL.md) and use this skill inside its explore phase.
+- Not for running long commands; that is [`background-runner`](../background-runner/SKILL.md).

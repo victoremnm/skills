@@ -30,6 +30,6 @@ Use this to check whether a repo has the minimum useful documentation.
 
 ## Not this skill
 
-- Not for writing session handover content from git activity; that is [`personal-handover`](./personal-handover/SKILL.md).
-- Not for security scanning; that is [`security-scrub`](./security-scrub/SKILL.md).
-- Not for code-quality or review feedback; that is [`address-feedback`](./address-feedback/SKILL.md).
+- Not for writing session handover content from git activity; that is [`personal-handover`](../personal-handover/SKILL.md).
+- Not for security scanning; that is [`security-scrub`](../security-scrub/SKILL.md).
+- Not for code-quality or review feedback; that is [`address-feedback`](../address-feedback/SKILL.md).
