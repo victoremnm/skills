@@ -1,6 +1,7 @@
 ---
 name: background-runner
-description: Run long builds, tests, linters, or verification in the background while continuing implementation work. Use when a command would block progress and does not need active supervision.
+description: Run long builds, tests, linters, or verification in the background while continuing implementation work. USE WHEN the user says "run this in the background", "start a long build", "watch this test", "keep this running", OR a command would block progress and does not need active supervision.
+version: 1.0.0
 ---
 
 # Background Runner
@@ -27,3 +28,9 @@ Use this for non-interactive commands that may take a while.
 - Prefer parallel runs for independent checks.
 - Avoid background mode for commands that need prompts or stepwise choices.
 - If the result blocks the next step, run it in the foreground instead.
+
+## Not this skill
+
+- Not for interactive or stepwise commands that need human input mid-run.
+- Not an autonomous PR polling loop; that is [`watch-pr`](../watch-pr/SKILL.md).
+- Not idle-time backlog work; that is [`idle-pickup`](../idle-pickup/SKILL.md).
