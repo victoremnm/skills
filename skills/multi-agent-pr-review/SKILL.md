@@ -6,15 +6,15 @@ version: 1.0.0
 
 # Multi-Agent PR Review
 
-A repeatable loop for shipping several changes with subagents while keeping a human-quality bar. Pairs with [`address-feedback`](./address-feedback/SKILL.md) (comment-resolution mechanics), [`watch-pr`](./watch-pr/SKILL.md) (single-PR polling to merge gate), and [`idle-pickup`](./idle-pickup/SKILL.md) (the cheap/opportunistic issue→draft-PR brief).
+A repeatable loop for shipping several changes with subagents while keeping a human-quality bar. Pairs with [`address-feedback`](../address-feedback/SKILL.md) (comment-resolution mechanics), [`watch-pr`](../watch-pr/SKILL.md) (single-PR polling to merge gate), and [`idle-pickup`](../idle-pickup/SKILL.md) (the cheap/opportunistic issue→draft-PR brief).
 
 ## The loop
 
 1. **Decompose → issues.** Turn the work into separate, well-scoped GitHub issues, each with: problem, evidence, scope (exact files), acceptance criteria, and conventions (branch+PR, commit style, the merge gate). One concern per issue.
-2. **Execute with subagents in isolated worktrees.** Spawn one subagent per issue (e.g. Sonnet), each in an **isolated worktree**. They implement, typecheck, open a PR (`Closes #NN`), and **never self-merge**. Different files → run in parallel; same file → sequence them (or one agent) to avoid conflicts. The subagent brief is the same shape as [`idle-pickup`](./idle-pickup/SKILL.md)'s issue→draft-PR flow, but here it is planned, merge-gated, and run at Sonnet (not Haiku).
+2. **Execute with subagents in isolated worktrees.** Spawn one subagent per issue (e.g. Sonnet), each in an **isolated worktree**. They implement, typecheck, open a PR (`Closes #NN`), and **never self-merge**. Different files → run in parallel; same file → sequence them (or one agent) to avoid conflicts. The subagent brief is the same shape as [`idle-pickup`](../idle-pickup/SKILL.md)'s issue→draft-PR flow, but here it is planned, merge-gated, and run at Sonnet (not Haiku).
 3. **Review with a stronger model (don't trust self-reports).** Read the actual diff, not the subagent's summary. **Independently validate claims** — especially run any SQL/queries against the real system rather than accepting "reasoned through / couldn't run it here." Subagents also get repo identity wrong (local dir name ≠ git remote) and can work in stray clones — verify the PR is against the right repo/base.
-4. **Watch each PR to the merge gate.** Do not restate the polling loop. Invoke [`watch-pr`](./watch-pr/SKILL.md) on each open PR; it polls for reviewer feedback and drives the PR to a merge-eligible state (zero unresolved threads, CI green). `watch-pr` delegates every per-comment decision to `address-feedback`.
-5. **Address findings and loop.** When `watch-pr` surfaces new threads, hand a PR's findings back to its subagent (resume it with the thread list) or fix inline; then use [`address-feedback`](./address-feedback/SKILL.md) to triage (Acknowledged / Irrelevant / Out-of-scope), reply, and resolve each thread. Re-run `watch-pr` after each push. Automated findings are usually legitimate — fix them, don't dismiss.
+4. **Watch each PR to the merge gate.** Do not restate the polling loop. Invoke [`watch-pr`](../watch-pr/SKILL.md) on each open PR; it polls for reviewer feedback and drives the PR to a merge-eligible state (zero unresolved threads, CI green). `watch-pr` delegates every per-comment decision to `address-feedback`.
+5. **Address findings and loop.** When `watch-pr` surfaces new threads, hand a PR's findings back to its subagent (resume it with the thread list) or fix inline; then use [`address-feedback`](../address-feedback/SKILL.md) to triage (Acknowledged / Irrelevant / Out-of-scope), reply, and resolve each thread. Re-run `watch-pr` after each push. Automated findings are usually legitimate — fix them, don't dismiss.
 
 ## Disciplines that matter
 
