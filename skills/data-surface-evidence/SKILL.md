@@ -16,7 +16,8 @@ Use this skill when a user reports that a data product looks wrong. The goal is 
    ```sql
    SELECT count() AS rows, min(timestamp_column) AS oldest,
           max(timestamp_column) AS newest
-   FROM source_table;
+   FROM source_table
+   WHERE timestamp_column >= now() - INTERVAL 24 HOUR;
 
    SELECT count() AS rows, max(bucket_column) AS newest
    FROM aggregate_table
@@ -38,4 +39,3 @@ Every implementation should leave behind:
 - a statement of whether the result is live, cached, sampled, or aggregate-derived.
 
 When a fallback is intentional, name the fallback and expose it in telemetry or the UI. A graceful degradation path must not masquerade as authoritative data.
-
