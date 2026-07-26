@@ -48,11 +48,11 @@ node scripts/screenshot.mjs http://localhost:3000/trending docs/pr-evidence/tren
 
 ## PR Evidence Workflow
 
-1. **Implement the change** on a feature branch.
-2. **Start the dev server** — `npm run dev` (or whatever the project's dev command is).
-3. **Take before screenshots** of the existing state if demonstrating a change from how things were before. Capture each relevant viewport or interaction state.
+1. **Capture the baseline before editing** — check out the base branch in a separate worktree (or save the current base commit), start its dev server, and take the before screenshots. Keep those files outside the feature worktree temporarily.
+2. **Implement the change** on a feature branch.
+3. **Start the feature server** — `npm run dev` (or whatever the project's dev command is).
 4. **Take after screenshots** showing the new behavior. Capture each mode, panel state, or interaction that reviewers need to see.
-5. **Commit screenshots** to `docs/pr-evidence/` on the feature branch:
+5. **Copy both baseline and after screenshots** into `docs/pr-evidence/` on the feature branch and commit them:
 
     ```
     docs/pr-evidence/trending-attention-mode.png
