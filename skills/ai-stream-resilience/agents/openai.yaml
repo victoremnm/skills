@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Stream Resilience"
+  short_description: "Handle empty prompts, quotas, and stream closure"
+  default_prompt: "Use $ai-stream-resilience to harden this AI streaming path against invalid prompts, quota failures, and closed streams."

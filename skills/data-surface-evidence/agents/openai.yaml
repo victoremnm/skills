@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Surface Evidence"
+  short_description: "Prove data UI results with SQL and API checks"
+  default_prompt: "Use $data-surface-evidence to investigate this data-backed UI result and provide reproducible evidence."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "ClickHouse Migration Safety"
+  short_description: "Validate migrations, MVs, drift, and backfills"
+  default_prompt: "Use $clickhouse-migration-safety to audit this ClickHouse migration and produce a safe verification plan."

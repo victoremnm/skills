@@ -63,11 +63,15 @@ Skills trigger automatically based on their descriptions. Examples:
 | [`address-feedback`](skills/address-feedback/SKILL.md) | resolve automated PR review feedback (CodeRabbit, Copilot, Codex, Claude, Vercel Toolbar) to zero open threads |
 | [`agent-chain`](skills/agent-chain/SKILL.md) | staged explore → plan → implement workflows |
 | [`background-runner`](skills/background-runner/SKILL.md) | long-running checks without blocking |
+| [`ai-stream-resilience`](skills/ai-stream-resilience/SKILL.md) | harden AI provider streams, retries, quotas, and closure |
+| [`clickhouse-migration-safety`](skills/clickhouse-migration-safety/SKILL.md) | validate schema migrations, derived data, drift, and backfills |
+| [`data-surface-evidence`](skills/data-surface-evidence/SKILL.md) | prove data-backed product results with query and API evidence |
 | [`idle-pickup`](skills/idle-pickup/SKILL.md) | use idle time — cheap subagents pick up ready issues and review open PRs, gated to draft PRs |
 | [`multi-agent-pr-review`](skills/multi-agent-pr-review/SKILL.md) | fan-out orchestration — decompose into issues, execute with subagents, review with a stronger model, merge behind a hard gate; delegates per-PR loops to `watch-pr` and comment triage to `address-feedback` |
 | [`parallel-explore`](skills/parallel-explore/SKILL.md) | bounded parallel codebase search |
 | [`personal-handover`](skills/personal-handover/SKILL.md) | session wrap-up across repos |
 | [`repo-docs-audit`](skills/repo-docs-audit/SKILL.md) | find missing docs and scaffolding |
+| [`realtime-feed-hardening`](skills/realtime-feed-hardening/SKILL.md) | harden live feeds, subscriptions, and polling fallbacks |
 | [`security-scrub`](skills/security-scrub/SKILL.md) | fast pre-push security scan |
 | [`watch-pr`](skills/watch-pr/SKILL.md) | autonomously poll a PR for reviewer feedback and drive every thread to resolved |
 
@@ -101,6 +105,8 @@ Keep each `SKILL.md` short. Move deterministic logic into scripts only when it m
 This repo keeps only broadly reusable workflow skills:
 
 - investigation and staged execution
+- data correctness, migration safety, and reproducible verification
+- realtime and AI stream resilience
 - background verification
 - repo documentation hygiene
 - session handoff

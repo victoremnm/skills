@@ -26,6 +26,10 @@
     "./skills/security-scrub",
     "./skills/watch-pr",
     "./skills/idle-pickup",
-    "./skills/multi-agent-pr-review"
+    "./skills/multi-agent-pr-review",
+    "./skills/ai-stream-resilience",
+    "./skills/clickhouse-migration-safety",
+    "./skills/data-surface-evidence",
+    "./skills/realtime-feed-hardening"
   ]
 }
