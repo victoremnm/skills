@@ -1,0 +1,4 @@
+interface:
+  display_name: "Realtime Feed Hardening"
+  short_description: "Harden realtime streams and polling fallbacks"
+  default_prompt: "Use $realtime-feed-hardening to review this realtime or polling feed for race and fallback failures."
