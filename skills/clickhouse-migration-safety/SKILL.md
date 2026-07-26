@@ -1,32 +1,31 @@
 ---
 name: clickhouse-migration-safety
-description: Audit and implement ClickHouse schema changes safely, including Goose migration ordering, materialized-view source correctness, production drift, local OSS smoke tests, and separate backfills. USE WHEN changing ClickHouse DDL, adding or repairing materialized views, investigating schema drift, or planning a migration/backfill rollout.
+description: Audit database schema migrations and derived-data changes safely, with concrete ClickHouse gotchas for materialized views, schema drift, local smoke tests, and separate backfills. USE WHEN changing DDL, adding rollups or materialized views, investigating migration drift, or planning a migration/backfill rollout.
 ---
 
-# ClickHouse Migration Safety
+# Migration Safety
 
-Use this skill to make schema changes convergent and independently verifiable. Treat the checked-in migration files, the live catalog, and the writer's actual destination as three separate facts that must agree.
+Use this skill to make schema changes convergent and independently verifiable. Treat the repository's migration files, the live catalog, and the writer's actual destination as three separate facts that must agree.
 
 ## Workflow
 
-1. **Map the contract before editing.** Find every writer, query, migration, and materialized view for the affected object. Record the physical table, any query-side view, engine, `ORDER BY`, partitioning, TTL, and aggregate-function state types.
-2. **Inspect the live catalog.** Run `SHOW CREATE TABLE db.object` and query `system.tables` for `database`, `name`, `engine`, and `create_table_query`. Do not infer the live object from a migration filename. If production differs, document the drift and identify which migration could not converge it.
-3. **Keep Goose migrations structural.** Put DDL only in migrations. Never insert or backfill data in Goose, and do not assume `CREATE ... IF NOT EXISTS` changes an existing object. A repair that changes an MV source or target needs an explicit, safe replacement strategy.
-4. **Validate MV sources.** An incremental MV must read from the physical table receiving inserts. Do not attach the MV to a query-side view unless the ingestion path demonstrably inserts into that view. Check the source in `create_table_query` and compare it with the writer target.
-5. **Separate backfill from migration.** After an MV is created or repaired, run an idempotent operator/script backfill for the missing window. Make the window, deduplication key, writer-pause requirement, and verification query explicit. Incremental MVs do not retroactively process rows that existed before creation.
-6. **Test the whole path.** Use a disposable OSS ClickHouse instance to apply any legacy source-schema fixture, run Goose `up` through the current migration, inspect the resulting objects, then exercise the supported `down` path where the project permits it. CI should run the same convergence test, including up/down ordering.
+1. **Map the contract before editing.** Find every writer, query, migration, derived object, and rollback path for the affected schema. Record types, keys, indexes, partitioning, retention, and ownership.
+2. **Inspect the live catalog.** Use the database's native schema introspection (`SHOW CREATE`, catalog tables, or equivalent). Do not infer the live object from a migration filename. If production differs, document the drift and identify which migration could not converge it.
+3. **Keep migrations structural.** Put DDL in migrations and data movement in a separately reviewable, idempotent operation. Never hide a backfill inside a schema migration. Do not assume `CREATE ... IF NOT EXISTS` changes an existing object; an existing object may require an explicit repair or replacement strategy.
+4. **Validate derived-object sources.** A derived table, trigger, view, or materialized view must observe the actual table or event stream receiving writes. A query-side view can be a read abstraction without being a valid change-data source.
+5. **Separate backfill from rollout.** Define the historical window, deduplication key, writer-pause requirement, batching, retry behavior, and before/after verification query. Do not assume a newly created derived object processes rows that existed before it.
+6. **Test the whole path.** Use a disposable local database to apply any legacy fixture, run migrations to the end, inspect the resulting objects, and exercise supported rollback/down paths. CI should run the same ordering and convergence checks.
+
+## ClickHouse gotchas
+
+- Incremental materialized views process insert blocks into their source table; attaching one to a read view does not make it observe inserts into an unrelated underlying table.
+- `CREATE MATERIALIZED VIEW IF NOT EXISTS` does not repair an existing view definition. Inspect `create_table_query` and use an explicit repair migration when the source or target is wrong.
+- Aggregate-state tables require the matching merge functions when queried; raw counts and aggregate states are not interchangeable.
+- A materialized-view creation migration does not backfill historical rows. Run the backfill separately after creation and verify its window.
 
 ## Evidence gate
 
-Before calling a migration safe, provide:
+Before calling a migration safe, provide the live-versus-checked-in schema comparison, a source-to-derived dependency check, local migration output, and a separate backfill proof when historical data is involved. Call out destructive operations, writer pauses, rollback limits, and any credential-gated verification.
 
-- the live and checked-in `SHOW CREATE` comparison;
-- a source-to-MV dependency check and latest timestamps/row counts on both sides;
-- local OSS migration output, including the exact migration that failed if blocked;
-- a separate backfill command and before/after count query, if historical data is involved;
-- explicit notes for destructive operations, writer pauses, and rollback limits.
-
-## Stop conditions
-
-Stop and report the blocker when the physical writer target is unknown, an MV source differs from the migration, a migration relies on an insert, or a backfill cannot be made idempotent. Do not “fix” drift by silently changing a view or by adding a compensating fallback in the query layer.
+Stop when the writer target is unknown, a derived source differs from the intended source, a migration relies on an insert, or a backfill cannot be made idempotent.
 
