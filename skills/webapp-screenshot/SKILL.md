@@ -11,11 +11,13 @@ Capture screenshots of a running dev server and commit them as visual evidence i
 ## Quick Start
 
 ```bash
-# Install Playwright
-npm install playwright
+# Install Playwright ephemerally; do not add evidence tooling to the target app
+npm install --no-save --no-package-lock playwright
+
+# Do not commit package.json, package-lock.json, or node_modules changes from this step
 
 # Install browser
-npx playwright install chromium
+npx --no-install playwright install chromium
 ```
 
 ## Screenshot Script
