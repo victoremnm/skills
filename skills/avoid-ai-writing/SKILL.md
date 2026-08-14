@@ -138,3 +138,11 @@ in place.
 
 - Not a grammar or spell-checker; it targets tone and padding, not correctness.
 - Not a style guide for code comments; see the repo's own conventions for those.
+
+## Attribution and license
+
+Sections 1-10 above adapt text from Wikipedia's [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing)
+(revision as of 2025, WikiProject AI Cleanup), used under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). That license, not the
+repository's MIT license, governs this file's prose; the MIT license in the repository root
+still applies to surrounding code, tooling, and other skills.
