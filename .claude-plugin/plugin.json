@@ -19,6 +19,7 @@
   "skills": [
     "./skills/address-feedback",
     "./skills/agent-chain",
+    "./skills/avoid-ai-writing",
     "./skills/background-runner",
     "./skills/parallel-explore",
     "./skills/personal-handover",

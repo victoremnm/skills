@@ -62,6 +62,7 @@ Skills trigger automatically based on their descriptions. Examples:
 |-------|---------|
 | [`address-feedback`](skills/address-feedback/SKILL.md) | resolve automated PR review feedback (CodeRabbit, Copilot, Codex, Claude, Vercel Toolbar) to zero open threads |
 | [`agent-chain`](skills/agent-chain/SKILL.md) | staged explore → plan → implement workflows |
+| [`avoid-ai-writing`](skills/avoid-ai-writing/SKILL.md) | strip AI-sounding writing patterns from prose before it ships |
 | [`background-runner`](skills/background-runner/SKILL.md) | long-running checks without blocking |
 | [`ai-stream-resilience`](skills/ai-stream-resilience/SKILL.md) | harden AI provider streams, retries, quotas, and closure |
 | [`clickhouse-migration-safety`](skills/clickhouse-migration-safety/SKILL.md) | validate schema migrations, derived data, drift, and backfills |
