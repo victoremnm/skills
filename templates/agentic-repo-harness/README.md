@@ -3,9 +3,6 @@
 This directory is the source for a GitHub template repository. It gives a new
 project a small, stack-neutral baseline for AI-assisted delivery.
 
-It does not require ClickHouse, a database, cloud credentials, or a deployment
-provider. Local subagent telemetry is an ignored NDJSON file.
-
 Copy the files into a fresh repository, then replace `{{REPOSITORY_NAME}}` and
 the other marked values before the first PR. Install the workflow skills from
 this repository with `npx skills@latest add victoremnm/skills`; use
