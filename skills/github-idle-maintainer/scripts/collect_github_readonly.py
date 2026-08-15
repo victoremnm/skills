@@ -51,6 +51,15 @@ def request(url: str, payload: dict | None = None) -> dict | list:
         return json.load(response)
 
 
+def request_optional_404(url: str) -> dict | list | None:
+    try:
+        return request(url)
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return None
+        raise
+
+
 def search(query: str) -> list[dict]:
     items: list[dict] = []
     page = 1
@@ -118,6 +127,29 @@ def latest_review_states(reviews: list[dict]) -> dict[str, str]:
     return {login: value[1] for login, value in latest.items()}
 
 
+def approval_evidence(repo_path: str, base_ref: str, latest: dict[str, str]) -> dict:
+    encoded_ref = urllib.parse.quote(base_ref, safe="")
+    rules = request(f"{API}/repos/{repo_path}/rules/branches/{encoded_ref}")
+    classic = request_optional_404(f"{API}/repos/{repo_path}/branches/{encoded_ref}/protection")
+
+    required = 0
+    for rule in rules:
+        if rule.get("type") == "pull_request":
+            required = max(required, int((rule.get("parameters") or {}).get("required_approving_review_count", 0)))
+    if classic:
+        required = max(
+            required,
+            int(((classic.get("required_pull_request_reviews") or {}).get("required_approving_review_count", 0))),
+        )
+    approvals = sorted(login for login, state in latest.items() if state == "APPROVED")
+    return {
+        "policy_known": True,
+        "required_count": required,
+        "approved_by": approvals,
+        "satisfied": len(approvals) >= required,
+    }
+
+
 def audit_pr(item: dict) -> dict:
     repo_path = urllib.parse.urlparse(item["repository_url"]).path.split("/repos/", 1)[-1]
     owner, name = repo_path.split("/", 1)
@@ -129,6 +161,7 @@ def audit_pr(item: dict) -> dict:
     reviews = get_all(f"{API}/repos/{repo_path}/pulls/{number}/reviews")
     thread_nodes = threads(owner, name, number)
     latest = latest_review_states(reviews)
+    approval = approval_evidence(repo_path, pr["base"]["ref"], latest)
 
     status_states = [s.get("state") for s in combined.get("statuses", [])]
     check_states = [
@@ -149,6 +182,8 @@ def audit_pr(item: dict) -> dict:
         and ci_green
         and unresolved == 0
         and not changes_requested
+        and approval["policy_known"]
+        and approval["satisfied"]
         and not human_hold
     )
     return {
@@ -164,6 +199,7 @@ def audit_pr(item: dict) -> dict:
         "ci_green": ci_green,
         "unresolved_threads": unresolved,
         "changes_requested_by": changes_requested,
+        "approval_evidence": approval,
         "human_hold_marker": human_hold,
         "mechanical_candidate": candidate,
     }
