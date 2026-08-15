@@ -17,22 +17,26 @@ jobs:
       - name: Validate plugin manifest
         run: python -m json.tool .claude-plugin/plugin.json >/dev/null
 
-      - name: Validate skill metadata and manifest entries
+      - name: Validate registered skills
         shell: python
         run: |
           import json
           import pathlib
           import re
 
-          root = pathlib.Path("skills")
-          skill_files = sorted(root.glob("*/SKILL.md"))
-          assert skill_files, "no skills found"
-
           manifest = json.loads(pathlib.Path(".claude-plugin/plugin.json").read_text())
-          registered = set(manifest.get("skills", []))
+          registered = manifest.get("skills", [])
+          assert registered, "plugin manifest has no registered skills"
+          assert len(registered) == len(set(registered)), "plugin manifest contains duplicate skills"
 
           failures = []
-          for skill_file in skill_files:
+          for entry in registered:
+              skill_dir = pathlib.Path(entry)
+              skill_file = skill_dir / "SKILL.md"
+              if not skill_file.is_file():
+                  failures.append(f"{entry}: missing SKILL.md")
+                  continue
+
               text = skill_file.read_text()
               match = re.match(
                   r"^---\n(?P<header>.*?)\n---\n",
@@ -54,10 +58,6 @@ jobs:
                   failures.append(f"{skill_file}: missing name")
               if not description or not description.group(1).strip():
                   failures.append(f"{skill_file}: missing description")
-
-              entry = f"./{skill_file.parent.as_posix()}"
-              if entry not in registered:
-                  failures.append(f"{entry}: absent from plugin manifest")
 
           if failures:
               raise SystemExit("\n".join(failures))
