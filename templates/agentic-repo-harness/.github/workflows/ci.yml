@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    name: Detect project stacks
+    runs-on: ubuntu-latest
+    outputs:
+      node: ${{ steps.stacks.outputs.node }}
+      python: ${{ steps.stacks.outputs.python }}
+      go: ${{ steps.stacks.outputs.go }}
+      rust: ${{ steps.stacks.outputs.rust }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: stacks
+        run: |
+          echo "node=$([[ -f package.json ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          if [[ -f pyproject.toml ]] || compgen -G 'requirements*.txt' > /dev/null; then
+            echo 'python=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'python=false' >> "$GITHUB_OUTPUT"
+          fi
+          echo "go=$([[ -f go.mod ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "rust=$([[ -f Cargo.toml ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+  hygiene:
+    name: Repository hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: ./scripts/ci/hygiene.sh
+
+  node:
+    name: Node.js
+    needs: [detect, hygiene]
+    if: ${{ needs.detect.outputs.node == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: ./scripts/ci/node.sh
+
+  python:
+    name: Python
+    needs: [detect, hygiene]
+    if: ${{ needs.detect.outputs.python == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: ./scripts/ci/python.sh
+
+  go:
+    name: Go
+    needs: [detect, hygiene]
+    if: ${{ needs.detect.outputs.go == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - run: ./scripts/ci/go.sh
+
+  rust:
+    name: Rust
+    needs: [detect, hygiene]
+    if: ${{ needs.detect.outputs.rust == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - run: ./scripts/ci/rust.sh
