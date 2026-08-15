@@ -48,5 +48,5 @@ For unattended runs, use the lowest-cost available model, a one-hour interval, a
 Set `IDLE_ORGS` to a comma-separated organization list. Optionally set `IDLE_REPO` (default: current directory) and `IDLE_MODEL` (default: `gpt-5.6-luna`). Example:
 
 ```cron
-0 * * * * IDLE_ORGS=org-a,org-b IDLE_REPO=/srv/work/repo /path/to/run-hourly.sh
+0 * * * * IDLE_ORGS=org-a,org-b IDLE_REPO=/srv/work/repo bash /path/to/run-hourly.sh
 ```
