@@ -31,6 +31,7 @@
     "./skills/ai-stream-resilience",
     "./skills/clickhouse-migration-safety",
     "./skills/data-surface-evidence",
-    "./skills/realtime-feed-hardening"
+    "./skills/realtime-feed-hardening",
+    "./skills/github-idle-maintainer"
   ]
 }
