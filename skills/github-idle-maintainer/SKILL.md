@@ -44,3 +44,9 @@ Return coverage counts by organization, merges with resulting SHAs, the human-re
 ## Scheduled operation
 
 For unattended runs, use the lowest-cost available model, a one-hour interval, a non-overlapping lock, and an ephemeral session. Scheduling never broadens authority. Use `scripts/run-hourly.sh` as the cron entrypoint and `assets/hourly-prompt.md` as its prompt.
+
+Set `IDLE_ORGS` to a comma-separated organization list. Optionally set `IDLE_REPO` (default: current directory) and `IDLE_MODEL` (default: `gpt-5.6-luna`). Example:
+
+```cron
+0 * * * * IDLE_ORGS=org-a,org-b IDLE_REPO=/srv/work/repo /path/to/run-hourly.sh
+```
