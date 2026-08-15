@@ -43,9 +43,11 @@ Return coverage counts by organization, merges with resulting SHAs, the human-re
 
 ## Scheduled operation
 
-For unattended runs, use the lowest-cost available model, a one-hour interval, a non-overlapping lock, and an ephemeral session. Unattended runs are read-only: report merge candidates but never mutate GitHub; perform merges only in an interactive pass with fresh revalidation. Scheduling never broadens authority. Use `scripts/run-hourly.sh` as the cron entrypoint and `assets/hourly-prompt.md` as its prompt.
+Do not give an unattended model a writable GitHub connector. Use `scripts/collect_github_readonly.py` to create a deterministic snapshot with fixed REST reads and a fixed GraphQL review-thread query. Then use `scripts/run-hourly.sh` to pass that snapshot to the lowest-cost model with connected apps disabled and a read-only filesystem sandbox.
 
-Set `IDLE_ORGS` to a comma-separated organization list. Optionally set `IDLE_REPO` (default: current directory) and `IDLE_MODEL` (default: `gpt-5.6-luna`). Example:
+The scheduled model reports merge candidates but never mutates GitHub. Perform merges only in an interactive pass with fresh revalidation. Scheduling never broadens authority.
+
+Set `IDLE_ORGS` to a comma-separated organization list. Optionally set `IDLE_REPO` (default: current directory) and `IDLE_MODEL` (default: `gpt-5.6-luna`). Invoke the script through Bash because GitHub-distributed files may not preserve executable mode:
 
 ```cron
 0 * * * * IDLE_ORGS=org-a,org-b IDLE_REPO=/srv/work/repo bash /path/to/run-hourly.sh
