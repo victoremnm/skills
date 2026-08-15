@@ -31,7 +31,7 @@ Merge only when every condition is true at the same fresh head SHA:
 - at least one CI/check exists and every required or observed check is successful;
 - no review is currently `CHANGES_REQUESTED`;
 - every inline review thread is resolved;
-- repository-required approvals are satisfied when that evidence is available;
+- repository approval policy is fetched and every required approval is proven satisfied; unavailable policy or approval evidence blocks merging;
 - no human-only rollout, security, data, or product decision remains;
 - expected head SHA is supplied to the merge call.
 
