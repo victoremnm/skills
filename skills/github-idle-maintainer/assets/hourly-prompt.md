@@ -1,7 +1,7 @@
-Use $github-idle-maintainer for one bounded maintenance pass. Read the comma-separated organization scope from the inherited `IDLE_ORGS` environment variable. Refuse to operate if it is absent or empty.
+Use $github-idle-maintainer for one bounded maintenance report.
 
-UNATTENDED SAFETY: This scheduled pass is read-only. Never call merge_pull_request, enable_auto_merge, update_ref, create_pull_request, or any other mutation. Report mechanically eligible candidates for an interactive agent to revalidate and merge.
+UNATTENDED SAFETY: This scheduled pass is read-only. The GitHub snapshot below was produced by deterministic collector code that performs only fixed reads. Connected apps are disabled and the filesystem sandbox is read-only. Never attempt any external lookup, GitHub mutation, issue pickup, draft creation, merge, or ref update.
 
-Inspect all open issues and PRs. Surface work needing human review. Assess merge candidates only when authored by the authenticated GitHub user and fresh evidence shows the PR is open, non-draft, mergeable, has at least one CI/check and all checks are green, has no CHANGES_REQUESTED review, and every review thread has is_resolved=true. A thread with is_resolved=false blocks candidacy even when outdated. Treat missing CI as not green. Do not pick up issues or create draft PRs in an unattended pass; list ready-for-agent issues for interactive pickup.
+Analyze only the supplied `github_snapshot`. Surface work needing human review. Treat a PR as a mechanical merge candidate only when `mechanical_candidate` is true. Never override the collector's decision. A thread with `is_resolved=false` blocks candidacy even when outdated, missing CI is not green, and human-hold markers block candidacy.
 
-End with counts, merge candidates (not merges), human blockers, ready issues, and incomplete coverage.
+End with organization counts, mechanical candidates (not merges), human blockers, ready issues, collection errors, and incomplete coverage.
