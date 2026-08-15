@@ -1,9 +1,10 @@
 name: CD
 
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
     branches: [main]
-  workflow_dispatch:
+    types: [completed]
 
 concurrency:
   group: cd-production
@@ -15,10 +16,13 @@ permissions:
 jobs:
   deploy:
     name: Deploy configured target
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment: production
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Run deployment hook
         env:
           DEPLOY_COMMAND: ${{ vars.DEPLOY_COMMAND }}

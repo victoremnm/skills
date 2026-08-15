@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cargo test --all-targets --locked
+if [[ -f Cargo.lock ]]; then
+  cargo test --all-targets --locked
+else
+  cargo test --all-targets
+fi

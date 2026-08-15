@@ -27,4 +27,4 @@ jobs:
       - name: Create GitHub release from conventional commits
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm exec --yes --package=semantic-release@25 --package=@semantic-release/github@12 semantic-release
+        run: npm exec --yes --package=semantic-release@25 --package=@semantic-release/github@12 --package=conventional-changelog-conventionalcommits@10.2.1 semantic-release

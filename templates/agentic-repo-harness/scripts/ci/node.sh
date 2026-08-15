@@ -18,7 +18,7 @@ else
 fi
 
 has_script() {
-  node -e "process.exit(require('./package.json').scripts?.[$1] ? 0 : 1)"
+  node -e "process.exit(require('./package.json').scripts?.[process.argv[1]] ? 0 : 1)" "$1"
 }
 
 if has_script test; then "$runner" run test; fi

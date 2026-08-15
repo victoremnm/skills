@@ -12,6 +12,27 @@ permissions:
   contents: read
 
 jobs:
+  detect:
+    name: Detect project stacks
+    runs-on: ubuntu-latest
+    outputs:
+      node: ${{ steps.stacks.outputs.node }}
+      python: ${{ steps.stacks.outputs.python }}
+      go: ${{ steps.stacks.outputs.go }}
+      rust: ${{ steps.stacks.outputs.rust }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: stacks
+        run: |
+          echo "node=$([[ -f package.json ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          if [[ -f pyproject.toml ]] || compgen -G 'requirements*.txt' > /dev/null; then
+            echo 'python=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'python=false' >> "$GITHUB_OUTPUT"
+          fi
+          echo "go=$([[ -f go.mod ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "rust=$([[ -f Cargo.toml ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
   hygiene:
     name: Repository hygiene
     runs-on: ubuntu-latest
@@ -21,7 +42,8 @@ jobs:
 
   node:
     name: Node.js
-    if: ${{ hashFiles('package.json') != '' }}
+    needs: [detect, hygiene]
+    if: ${{ needs.detect.outputs.node == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -32,7 +54,8 @@ jobs:
 
   python:
     name: Python
-    if: ${{ hashFiles('pyproject.toml') != '' || hashFiles('requirements*.txt') != '' }}
+    needs: [detect, hygiene]
+    if: ${{ needs.detect.outputs.python == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -43,7 +66,8 @@ jobs:
 
   go:
     name: Go
-    if: ${{ hashFiles('go.mod') != '' }}
+    needs: [detect, hygiene]
+    if: ${{ needs.detect.outputs.go == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -54,7 +78,8 @@ jobs:
 
   rust:
     name: Rust
-    if: ${{ hashFiles('Cargo.toml') != '' }}
+    needs: [detect, hygiene]
+    if: ${{ needs.detect.outputs.rust == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
