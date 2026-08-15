@@ -129,8 +129,17 @@ def latest_review_states(reviews: list[dict]) -> dict[str, str]:
 
 def approval_evidence(repo_path: str, base_ref: str, latest: dict[str, str]) -> dict:
     encoded_ref = urllib.parse.quote(base_ref, safe="")
-    rules = request(f"{API}/repos/{repo_path}/rules/branches/{encoded_ref}")
-    classic = request_optional_404(f"{API}/repos/{repo_path}/branches/{encoded_ref}/protection")
+    try:
+        rules = request(f"{API}/repos/{repo_path}/rules/branches/{encoded_ref}")
+        classic = request_optional_404(f"{API}/repos/{repo_path}/branches/{encoded_ref}/protection")
+    except urllib.error.HTTPError as exc:
+        return {
+            "policy_known": False,
+            "required_count": None,
+            "approved_by": sorted(login for login, state in latest.items() if state == "APPROVED"),
+            "satisfied": False,
+            "error": f"HTTP {exc.code}: approval policy unavailable",
+        }
 
     required = 0
     for rule in rules:
