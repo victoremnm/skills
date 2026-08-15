@@ -11,5 +11,5 @@ readonly IDLE_LOCK="/tmp/github-idle-maintainer-$(id -u).lock"
 exec 9>"${IDLE_LOCK}"
 flock -n 9 || exit 0
 
-exec codex exec --cd "${IDLE_REPO}" --ephemeral --model "${IDLE_MODEL}" \
-  --sandbox workspace-write --ask-for-approval never - < "${IDLE_PROMPT}"
+exec codex --ask-for-approval never --model "${IDLE_MODEL}" --sandbox workspace-write \
+  --cd "${IDLE_REPO}" exec --ephemeral - < "${IDLE_PROMPT}"
