@@ -1,0 +1,25 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cd-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy configured target
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run deployment hook
+        env:
+          DEPLOY_COMMAND: ${{ vars.DEPLOY_COMMAND }}
+        run: ./scripts/deploy.sh
