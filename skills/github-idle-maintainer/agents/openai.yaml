@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Idle Maintainer"
+  short_description: "Safely triage org backlogs and merge owned PRs"
+  default_prompt: "Use $github-idle-maintainer to audit configured GitHub organizations, surface human blockers, and merge only my eligible PRs."

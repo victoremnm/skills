@@ -1,0 +1,72 @@
+name: Validate skills
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate plugin manifest
+        run: python -m json.tool .claude-plugin/plugin.json >/dev/null
+
+      - name: Validate registered skills
+        shell: python
+        run: |
+          import json
+          import pathlib
+          import re
+
+          manifest = json.loads(pathlib.Path(".claude-plugin/plugin.json").read_text())
+          registered = manifest.get("skills", [])
+          assert registered, "plugin manifest has no registered skills"
+          assert len(registered) == len(set(registered)), "plugin manifest contains duplicate skills"
+
+          failures = []
+          for entry in registered:
+              skill_dir = pathlib.Path(entry)
+              skill_file = skill_dir / "SKILL.md"
+              if not skill_file.is_file():
+                  failures.append(f"{entry}: missing SKILL.md")
+                  continue
+
+              text = skill_file.read_text()
+              match = re.match(
+                  r"^---\n(?P<header>.*?)\n---\n",
+                  text,
+                  flags=re.DOTALL,
+              )
+              if not match:
+                  failures.append(f"{skill_file}: missing YAML frontmatter")
+                  continue
+
+              header = match.group("header")
+              name = re.search(r"^name:\s*(.+)$", header, flags=re.MULTILINE)
+              description = re.search(
+                  r"^description:\s*(.+)$",
+                  header,
+                  flags=re.MULTILINE,
+              )
+              if not name or not name.group(1).strip():
+                  failures.append(f"{skill_file}: missing name")
+              if not description or not description.group(1).strip():
+                  failures.append(f"{skill_file}: missing description")
+
+          if failures:
+              raise SystemExit("\n".join(failures))
+
+      - name: Check shell syntax
+        run: |
+          while IFS= read -r -d '' script; do
+            bash -n "$script"
+          done < <(find . -type f -name '*.sh' -print0)
+
+      - name: Compile Python helpers
+        run: python -m compileall -q skills
