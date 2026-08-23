@@ -10,10 +10,13 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 API = "https://api.github.com"
 GRAPHQL = "https://api.github.com/graphql"
+HTTP_TIMEOUT = float(os.environ.get("IDLE_HTTP_TIMEOUT", "15"))
+MAX_WORKERS = max(1, int(os.environ.get("IDLE_MAX_WORKERS", "8")))
 
 
 def credential() -> str:
@@ -47,7 +50,7 @@ def request(url: str, payload: dict | None = None) -> dict | list:
     if data is not None:
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(url, data=data, headers=headers, method="GET" if data is None else "POST")
-    with urllib.request.urlopen(req, timeout=45) as response:
+    with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as response:
         return json.load(response)
 
 
@@ -214,6 +217,17 @@ def audit_pr(item: dict) -> dict:
     }
 
 
+def audit_pr_safe(item: dict) -> tuple[dict | None, dict | None]:
+    """Audit one PR without allowing a single failed read to stop the sweep."""
+    try:
+        return audit_pr(item), None
+    except Exception as exc:
+        return None, {
+            "url": item.get("html_url"),
+            "error": f"{type(exc).__name__}: {exc}",
+        }
+
+
 def authenticated_login() -> str:
     return request(f"{API}/user")["login"]
 
@@ -229,6 +243,7 @@ snapshot = {
     "prs": [],
     "errors": [],
 }
+pr_items: list[dict] = []
 for org in orgs:
     issues = search(f"org:{org} is:issue is:open")
     prs = search(f"org:{org} is:pr is:open")
@@ -238,11 +253,14 @@ for org in orgs:
         "open_pr_count": len(prs),
         "ready_issues": [{"repo_url": i["repository_url"], "number": i["number"], "title": i["title"], "url": i["html_url"]} for i in ready],
     }
-    for item in prs:
-        try:
-            snapshot["prs"].append(audit_pr(item))
-        except Exception as exc:
-            snapshot["errors"].append({"url": item.get("html_url"), "error": f"{type(exc).__name__}: {exc}"})
+    pr_items.extend(prs)
+
+with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+    for result, error in executor.map(audit_pr_safe, pr_items):
+        if result is not None:
+            snapshot["prs"].append(result)
+        if error is not None:
+            snapshot["errors"].append(error)
 
 json.dump(snapshot, sys.stdout, separators=(",", ":"))
 sys.stdout.write("\n")

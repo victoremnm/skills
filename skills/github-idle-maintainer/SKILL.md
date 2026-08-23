@@ -47,7 +47,7 @@ Do not give an unattended model a writable GitHub connector. Use `scripts/collec
 
 The scheduled model reports merge candidates but never mutates GitHub. Perform merges only in an interactive pass with fresh revalidation. Scheduling never broadens authority.
 
-Set `IDLE_ORGS` to a comma-separated organization list. Optionally set `IDLE_REPO` (default: current directory) and `IDLE_MODEL` (default: `gpt-5.6-luna`). Invoke the script through Bash because GitHub-distributed files may not preserve executable mode:
+Set `IDLE_ORGS` to a comma-separated organization list. Optionally set `IDLE_REPO` (default: current directory), `IDLE_MODEL` (default: `gpt-5.6-luna`), `IDLE_HTTP_TIMEOUT` (default: 15 seconds per GitHub request), and `IDLE_MAX_WORKERS` (default: 8 concurrent PR audits). These bounds keep one slow endpoint from consuming an entire hourly window; timed-out PR reads are reported as collection errors and never treated as mergeable. Invoke the script through Bash because GitHub-distributed files may not preserve executable mode:
 
 ```cron
 0 * * * * IDLE_ORGS=org-a,org-b IDLE_REPO=/srv/work/repo bash /path/to/run-hourly.sh
