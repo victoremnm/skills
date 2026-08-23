@@ -20,6 +20,7 @@
     "./skills/address-feedback",
     "./skills/agent-chain",
     "./skills/avoid-ai-writing",
+    "./skills/elements-of-style",
     "./skills/background-runner",
     "./skills/parallel-explore",
     "./skills/personal-handover",

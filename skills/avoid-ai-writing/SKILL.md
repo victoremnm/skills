@@ -1,6 +1,6 @@
 ---
 name: avoid-ai-writing
-description: Strip AI-sounding writing patterns (promotional language, vague attribution, litotes, filler vocabulary, formulaic structure, formatting tics) from prose before it ships. USE WHEN writing or reviewing artifacts, documentation, reports, PR/commit descriptions, or any response with more than a couple paragraphs of original prose. Adapted from Wikipedia's "Signs of AI writing".
+description: Strip AI-sounding writing patterns (promotional language, vague attribution, litotes, filler vocabulary, formulaic structure, formatting tics) from prose before it ships. USE WHEN writing or reviewing artifacts, documentation, reports, PR/commit descriptions, or any response with more than a couple paragraphs of original prose. Adapted from Wikipedia's "Signs of AI writing". Companion to elements-of-style, which covers the constructional side (active voice, positive form, concrete language, omitting needless words).
 version: 1.0.0
 ---
 
@@ -8,6 +8,12 @@ version: 1.0.0
 
 A checklist for catching writing that reads as machine-generated. The underlying problem is
 usually inflated confidence or padding; the vocabulary is only the symptom.
+
+This is a post-hoc filter: run it over a finished draft. For the constructional habits that
+prevent much of this padding in the first place — active voice, positive statement, concrete
+language, omitting needless words, parallel construction — see `elements-of-style`, adapted
+from Strunk's *The Elements of Style*. Draft with that skill's rules in mind, then run this
+checklist before shipping.
 
 ## 1. Litotes and negative parallelism: the most common tell
 

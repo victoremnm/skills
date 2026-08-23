@@ -64,6 +64,7 @@ Skills trigger automatically based on their descriptions. Examples:
 | [`agent-chain`](skills/agent-chain/SKILL.md) | staged explore → plan → implement workflows |
 | [`agentic-repo-harness`](skills/agentic-repo-harness/SKILL.md) | scaffold or audit a portable agent-ready repository harness |
 | [`avoid-ai-writing`](skills/avoid-ai-writing/SKILL.md) | strip AI-sounding writing patterns from prose before it ships |
+| [`elements-of-style`](skills/elements-of-style/SKILL.md) | apply Strunk's rules of usage and composition for clear, forceful prose; companion to `avoid-ai-writing` |
 | [`background-runner`](skills/background-runner/SKILL.md) | long-running checks without blocking |
 | [`ai-stream-resilience`](skills/ai-stream-resilience/SKILL.md) | harden AI provider streams, retries, quotas, and closure |
 | [`clickhouse-migration-safety`](skills/clickhouse-migration-safety/SKILL.md) | validate schema migrations, derived data, drift, and backfills |
