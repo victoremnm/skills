@@ -16,6 +16,21 @@ runtime, module system, type settings, formatter, and framework conventions.
 - Prefer pure transformations where practical. Keep mutation, DOM work, I/O,
   storage, and network effects at visible boundaries.
 
+Bad:
+
+```javascript
+function process(items, doubleItems = false) {
+  return doubleItems ? items.map(item => item * 2) : items;
+}
+```
+
+Good:
+
+```javascript
+const doubleItems = items => items.map(item => item * 2);
+const keepItems = items => items;
+```
+
 ## Objects, modules, and classes
 
 - Keep data structures and behavior coherent. Encapsulate invariants instead of
@@ -29,6 +44,24 @@ runtime, module system, type settings, formatter, and framework conventions.
   design problem. Use narrow unions, interfaces, or domain types where they
   improve callers' understanding.
 
+Bad:
+
+```typescript
+function createUser(data: any) {
+  return { name: data.name, role: data.role };
+}
+```
+
+Good:
+
+```typescript
+type UserInput = { name: string; role: "admin" | "member" };
+
+function createUser(data: UserInput) {
+  return { name: data.name, role: data.role };
+}
+```
+
 ## Async and errors
 
 - Prefer promises and `async`/`await` over nested callbacks. Handle rejected
@@ -40,6 +73,26 @@ runtime, module system, type settings, formatter, and framework conventions.
 - Avoid accidental sequential waits or unbounded parallelism; choose based on
   dependency and resource constraints, not stylistic preference.
 
+Bad:
+
+```javascript
+async function loadUsers(ids) {
+  const users = [];
+  for (const id of ids) {
+    users.push(await fetchUser(id));
+  }
+  return users;
+}
+```
+
+Good:
+
+```javascript
+async function loadUsers(ids) {
+  return Promise.all(ids.map(fetchUser));
+}
+```
+
 ## Testing, formatting, and comments
 
 - Test behavior at module boundaries and isolate external systems behind
@@ -49,5 +102,19 @@ runtime, module system, type settings, formatter, and framework conventions.
   architectural findings.
 - Comment intent, invariants, compatibility constraints, or surprising runtime
   behavior. Remove comments that merely repeat the code.
+
+Bad:
+
+```javascript
+// Increment i by 1.
+i += 1;
+```
+
+Good:
+
+```javascript
+// Keep the retry budget bounded to avoid a retry storm.
+retryCount += 1;
+```
 
 Source: [clean-code-javascript](https://github.com/ryanmcdermott/clean-code-javascript).

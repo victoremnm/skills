@@ -15,6 +15,24 @@ version and configured tools over generic rules.
 - Split filtering, transformation, I/O, and orchestration when they are separate
   responsibilities. Keep each function at one level of abstraction.
 
+Bad:
+
+```python
+def process(items, flag=False):
+    return [item * 2 for item in items] if flag else list(items)
+```
+
+Good:
+
+```python
+def double_items(items: list[int]) -> list[int]:
+    return [item * 2 for item in items]
+
+
+def keep_items(items: list[int]) -> list[int]:
+    return list(items)
+```
+
 ## Python-specific design
 
 - Add or preserve useful type annotations. Use precise domain types instead of
@@ -31,6 +49,28 @@ version and configured tools over generic rules.
   context. Do not catch broadly and silently continue; preserve exception causes
   when raising a domain error.
 
+Bad:
+
+```python
+def load_user(user_id):
+    try:
+        return repository.fetch(user_id)
+    except Exception:
+        return None
+```
+
+Good:
+
+```python
+def load_user(user_id: int) -> User:
+    try:
+        return repository.fetch(user_id)
+    except UserNotFoundError:
+        raise
+    except RepositoryError as error:
+        raise UserLoadError(user_id) from error
+```
+
 ## Classes and abstractions
 
 - Give a class one cohesive reason to change. Separate data acquisition,
@@ -40,6 +80,28 @@ version and configured tools over generic rules.
 - Prefer small composable protocols or ABCs over comprehensive interfaces with
   methods consumers do not need. Prefer composition when inheritance adds
   coupling without a genuine subtype relationship.
+
+Bad:
+
+```python
+class ReportService:
+    def build(self, rows):
+        return "\\n".join(str(row) for row in rows)
+
+    def save(self, rows, path):
+        Path(path).write_text(self.build(rows))
+```
+
+Good:
+
+```python
+def render_report(rows) -> str:
+    return "\\n".join(str(row) for row in rows)
+
+
+def save_report(content: str, path: Path) -> None:
+    path.write_text(content)
+```
 
 ## Verification
 
