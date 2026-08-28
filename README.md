@@ -68,6 +68,7 @@ Skills trigger automatically based on their descriptions. Examples:
 | [`background-runner`](skills/background-runner/SKILL.md) | long-running checks without blocking |
 | [`ai-stream-resilience`](skills/ai-stream-resilience/SKILL.md) | harden AI provider streams, retries, quotas, and closure |
 | [`clickhouse-migration-safety`](skills/clickhouse-migration-safety/SKILL.md) | validate schema migrations, derived data, drift, and backfills |
+| [`clean-code`](skills/clean-code/SKILL.md) | review and improve Python, JavaScript, and TypeScript code structure |
 | [`data-surface-evidence`](skills/data-surface-evidence/SKILL.md) | prove data-backed product results with query and API evidence |
 | [`idle-pickup`](skills/idle-pickup/SKILL.md) | use idle time — cheap subagents pick up ready issues and review open PRs, gated to draft PRs |
 | [`multi-agent-pr-review`](skills/multi-agent-pr-review/SKILL.md) | fan-out orchestration — decompose into issues, execute with subagents, review with a stronger model, merge behind a hard gate; delegates per-PR loops to `watch-pr` and comment triage to `address-feedback` |

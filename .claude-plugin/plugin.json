@@ -33,6 +33,7 @@
     "./skills/clickhouse-migration-safety",
     "./skills/data-surface-evidence",
     "./skills/realtime-feed-hardening",
-    "./skills/github-idle-maintainer"
+    "./skills/github-idle-maintainer",
+    "./skills/clean-code"
   ]
 }
