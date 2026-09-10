@@ -1,6 +1,6 @@
 ---
 name: elements-of-style
-description: Apply Strunk's rules of usage and composition — active voice, positive form, concrete language, omitting needless words, parallel construction, emphatic word order — to make prose clear and forceful while drafting or revising. USE WHEN writing or reviewing artifacts, documentation, reports, PR/commit descriptions, or any response with more than a couple paragraphs of original prose. Companion to avoid-ai-writing: that skill strips bad tics after the fact, this one builds sound sentences and paragraphs from the start. Adapted from Strunk's "The Elements of Style" (1918, public domain).
+description: "Apply Strunk's rules of usage and composition — active voice, positive form, concrete language, omitting needless words, parallel construction, emphatic word order — to make prose clear and forceful while drafting or revising. USE WHEN writing or reviewing artifacts, documentation, reports, PR/commit descriptions, or any response with more than a couple paragraphs of original prose. Companion to avoid-ai-writing: that skill strips bad tics after the fact, this one builds sound sentences and paragraphs from the start. Adapted from Strunk's \"The Elements of Style\" (1918, public domain)."
 version: 1.0.0
 ---
 
