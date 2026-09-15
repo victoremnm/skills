@@ -29,8 +29,11 @@ For a multi-PR review, assign one reviewer per PR when parallel review is
 available. Reviewers must be read-only and must not check out shared branches:
 
 - Use the hosting provider's per-PR diff and metadata commands (for GitHub,
-  `gh pr diff <number>` and `gh pr view <number> --json body,baseRefName,headRefName`).
-- Inspect an exact version of a file with `git show origin/<head-branch>:<path>`.
+  `gh pr diff <number>` and `gh pr view <number> --json body,baseRefName,headRefName,headRefOid,headRepository,isCrossRepository`).
+- Pin file inspection to the PR's immutable head OID: use
+  `git show <head-oid>:<path>` when that object is available locally. For a
+  fork or unavailable object, retrieve the file through the hosting provider's
+  API with the head OID as its ref; do not substitute a local tracking branch.
 - Do not use `git checkout`, `git switch`, rebases, or worktrees that could
   interfere with another reviewer in the shared workspace.
 

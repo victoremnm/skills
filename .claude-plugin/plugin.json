@@ -34,6 +34,7 @@
     "./skills/data-surface-evidence",
     "./skills/realtime-feed-hardening",
     "./skills/github-idle-maintainer",
-    "./skills/clean-code"
+    "./skills/clean-code",
+    "./skills/stacked-pr-review"
   ]
 }
