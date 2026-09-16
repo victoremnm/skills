@@ -1,7 +1,6 @@
 ---
 name: avoid-ai-writing
 description: Strip AI-sounding writing patterns (promotional language, vague attribution, litotes, filler vocabulary, formulaic structure, formatting tics) from prose before it ships. USE WHEN writing or reviewing artifacts, documentation, reports, PR/commit descriptions, or any response with more than a couple paragraphs of original prose. Adapted from Wikipedia's "Signs of AI writing". Companion to elements-of-style, which covers the constructional side (active voice, positive form, concrete language, omitting needless words).
-version: 1.0.0
 ---
 
 # Avoid AI writing
@@ -14,6 +13,9 @@ prevent much of this padding in the first place — active voice, positive state
 language, omitting needless words, parallel construction — see `elements-of-style`, adapted
 from Strunk's *The Elements of Style*. Draft with that skill's rules in mind, then run this
 checklist before shipping.
+
+For fiction of meaningful length, also use the narrative check below. It addresses recurring
+story-construction defaults, which survive an otherwise successful line edit.
 
 ## 1. Litotes and negative parallelism: the most common tell
 
@@ -131,6 +133,41 @@ After a draft, look for the marks of writing that carries its weight:
 - A claim that could be wrong, stated plainly instead of hedged into meaninglessness.
 - Cutting a sentence entirely when it doesn't add new information, even if it "sounds nice."
 
+## 11. Fiction: check the story, not just the sentences
+
+Use this pass for stories, scenes, scripts, and other narrative fiction. It is not a recipe for
+making a story "human," and it does not apply to technical or factual writing. The point is to
+notice when a draft has chosen the most frictionless version of its material, then decide whether
+that choice serves the story.
+
+- **Let the theme emerge.** Cut or recast narration that announces the lesson, explains a
+  symbol, or turns dialogue into a philosophical debate unless that didactic quality belongs to
+  the narrator or character. Let actions, consequences, and contradiction carry meaning.
+- **Audit the resolution.** A protagonist's choice can resolve a story, but beware a chain in
+  which every event cleanly causes the next and every thread closes through a final inner
+  realization. Preserve loose ends, external pressures, competing motives, or an unresolved
+  consequence when they are already part of the premise.
+- **Make moral framing earned.** Do not flatten a protagonist into clearly right, wrong, or
+  redeemed merely to make the ending satisfying. Keep genuine ambiguity when the character's
+  choices warrant it.
+- **Vary the story's shape when the material calls for it.** A chronological, single-plot story
+  is often right. Do not add flashbacks or subplots as decoration. But if a withheld fact, a
+  changed understanding, or a second thread would deepen the story, do not discard it for a
+  tidier linear route.
+- **Use bodily and sensory detail selectively.** A tightening chest, cold sweat, scent, or
+  weather mirroring a character's mood is useful when it reveals something particular. Cut a
+  pile-up of physical symptoms and atmosphere that repeats an emotion the reader already
+  understands. Naming the emotion plainly can be stronger.
+- **Keep setting from becoming emotional wallpaper.** Describe a place because it constrains,
+  changes, or complicates the action—not only because rain, darkness, or decay can echo a mood.
+- **Prefer specific cultural and textual connections when the story has them.** A named work,
+  place, custom, or shared reference can do real narrative work. Do not replace it with a vague
+  allusion simply to sound literary, and do not invent references the story cannot support.
+
+These are revision questions, not quotas. A fable may state its moral; a thriller may need a
+clean causal chain; a sensory scene may need to be lush. Change a narrative choice only when it
+weakens this particular story.
+
 ## How to apply this
 
 Write the draft, then re-read it once against this list before sending or publishing. Context
@@ -152,3 +189,8 @@ Sections 1-10 above adapt text from Wikipedia's [Signs of AI writing](https://en
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). That license, not the
 repository's MIT license, governs this file's prose; the MIT license in the repository root
 still applies to surrounding code, tooling, and other skills.
+
+The fiction guidance in section 11 draws on Russell et al.,
+["StoryScope: Investigating idiosyncrasies in AI fiction"](https://arxiv.org/abs/2604.03136)
+(2026), which reports correlations in a controlled corpus of long fiction. Its findings do not
+establish authorship for an individual work and should not be used as an AI detector.
