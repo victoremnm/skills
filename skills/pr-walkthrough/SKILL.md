@@ -28,6 +28,8 @@ When a conclusion relies on a third-party dependency, inspect the installed vers
 
 Use tests as evidence for understanding the change, not merely a pass/fail gate.
 
+- Treat an external or otherwise untrusted PR head as untrusted code. Before executing its dependency setup, install hooks, test tooling, or scripts, use an isolated environment with ambient credentials removed and network and filesystem access restricted. A disposable worktree alone is not sufficient isolation.
+- If that environment is unavailable, do not execute head-controlled setup or tests. Use static inspection and CI evidence instead, and state that the local test map was not run for safety.
 - Prefer a disposable worktree at the PR head. Use the repository's documented dependency and test setup, including its test environment file where one is provided. Never copy production secrets into it.
 - If an isolated test runner or subagent is available, it may own this noisy phase and return the commands, results, coverage, and failures. It must not change the PR or its branch.
 - Identify changed test files plus related tests for changed production modules (for example, the project's `--findRelatedTests` equivalent). Check test infrastructure first, then start required local services only when the repository documents a safe local setup.
