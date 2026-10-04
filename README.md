@@ -74,6 +74,7 @@ Skills trigger automatically based on their descriptions. Examples:
 | [`multi-agent-pr-review`](skills/multi-agent-pr-review/SKILL.md) | fan-out orchestration — decompose into issues, execute with subagents, review with a stronger model, merge behind a hard gate; delegates per-PR loops to `watch-pr` and comment triage to `address-feedback` |
 | [`parallel-explore`](skills/parallel-explore/SKILL.md) | bounded parallel codebase search |
 | [`personal-handover`](skills/personal-handover/SKILL.md) | session wrap-up across repos |
+| [`pr-walkthrough`](skills/pr-walkthrough/SKILL.md) | read-only, evidence-backed explanation of a pull request |
 | [`repo-docs-audit`](skills/repo-docs-audit/SKILL.md) | find missing docs and scaffolding |
 | [`realtime-feed-hardening`](skills/realtime-feed-hardening/SKILL.md) | harden live feeds, subscriptions, and polling fallbacks |
 | [`security-scrub`](skills/security-scrub/SKILL.md) | fast pre-push security scan |
