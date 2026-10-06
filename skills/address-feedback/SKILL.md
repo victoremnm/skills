@@ -1,12 +1,12 @@
 ---
 name: address-feedback
-description: Address open feedback from code review tools (CodeRabbit, Copilot, Codex, Claude Code Action) and live preview comments (Vercel Toolbar). USE WHEN user says "address feedback", "fix coderabbit", "fix copilot comments", "fix codex comments", "fix claude comments", "address review comments", "handle PR feedback", "address vercel comments", "check preview feedback", OR needs to systematically resolve automated code review issues or human comments left on a Vercel preview deployment.
+description: Address open feedback from GitHub reviewers (human or automated) and live preview comments (Vercel Toolbar). USE WHEN user says "address feedback", "fix coderabbit", "fix copilot comments", "fix codex comments", "fix claude comments", "address review comments", "handle PR feedback", "address vercel comments", "check preview feedback", OR needs to systematically resolve open GitHub review threads or human comments left on a Vercel preview deployment.
 version: 1.3.0
 ---
 
 # Address Feedback
 
-Systematically fetch, resolve, and **reply to** feedback from automated code review tools that leave GitHub PR comments, and from human reviewers who leave live comments on a Vercel preview deployment via the Vercel Toolbar.
+Systematically fetch, resolve, and **reply to** feedback from every unresolved GitHub PR review thread—whether its author is a human or an automated reviewer—and from human reviewers who leave live comments on a Vercel preview deployment via the Vercel Toolbar.
 
 **Key behavior:** After addressing each feedback point, automatically post a reply on behalf of the user explaining what was fixed and how — on GitHub for GitHub-native sources, and on the Vercel Toolbar thread itself (plus a collated GitHub summary) for Vercel feedback.
 
@@ -16,6 +16,7 @@ Systematically fetch, resolve, and **reply to** feedback from automated code rev
 
 | Source | Detection | Fetch Method |
 | -------- | ----------- | -------------- |
+| **GitHub PR reviewer** | Any author on an unresolved GitHub review thread | GitHub GraphQL API |
 | **CodeRabbit** | `coderabbit` user in PR comments | GitHub API |
 | **Copilot** | `copilot` user in PR reviews | GitHub API |
 | **Codex** | `chatgpt-codex-connector` user in PR review threads (P1/P2/P3 badges) | GitHub API (review threads) |
@@ -62,6 +63,8 @@ if [ -z "$PR_NUM" ] || [ "$PR_NUM" = "null" ]; then
 fi
 
 REPO=$(gh repo view --json nameWithOwner --jq '.nameWithOwner')
+REPO_OWNER=${REPO%/*}
+REPO_NAME=${REPO#*/}
 ```
 
 **If no PR exists:** Ask the user which PR to address, or if they want to create one first.
@@ -83,6 +86,22 @@ If `.vercel/project.json` is missing but the user explicitly asked to "address v
 ---
 
 ## Phase 2: Fetch Feedback
+
+### GitHub review threads (required — every author)
+
+This is the authoritative GitHub fetch. Retrieve **every unresolved review thread**, regardless of whether the original commenter is a human, CodeRabbit, Copilot, Codex, Claude Code Action, or another integration. Do not use a bot-author filter as a proxy for open feedback.
+
+```bash
+# Fetch every unresolved GitHub review thread with its full conversation.
+# A prior reply (including "I'll look at this") does NOT mean the feedback is handled:
+# triage every thread returned here until it is explicitly resolved.
+env -u GITHUB_TOKEN gh api graphql --paginate -f query='query($owner:String!,$name:String!,$n:Int!,$endCursor:String){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){nodes{id isResolved path line comments(first:100){nodes{databaseId author{login} body createdAt}}} pageInfo{hasNextPage endCursor}}}}}' -F owner="$REPO_OWNER" -F name="$REPO_NAME" -F n="$PR_NUM" -F endCursor=null \
+  --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | {threadId:.id, path, line, comments:[.comments.nodes[] | {databaseId, author:.author.login, body, createdAt}]}'
+```
+
+Use the original comment to understand the requested change and read all later replies for context. A thread is handled only when it has been explicitly resolved with the GraphQL `resolveReviewThread` mutation; a reply or acknowledgement alone never removes it from the work list.
+
+The source-specific fetches below are optional supplemental context for bot review summaries and issue comments. They must not replace the all-author unresolved-thread fetch above.
 
 ### CodeRabbit Comments
 
@@ -427,11 +446,11 @@ Replying via `.../comments/{id}/replies` does **not** resolve the thread. Resolv
 
 ```bash
 # Fetch unresolved threads WITH their node id + first comment databaseId
-env -u GITHUB_TOKEN gh api graphql -f query='query($n:Int!){repository(owner:"OWNER",name:"REPO"){pullRequest(number:$n){reviewThreads(first:100){nodes{id isResolved path line comments(first:1){nodes{databaseId author{login} body}}}}}}}' -F n=PR_NUM \
+env -u GITHUB_TOKEN gh api graphql --paginate -f query='query($owner:String!,$name:String!,$n:Int!,$endCursor:String){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){nodes{id isResolved path line comments(first:1){nodes{databaseId author{login} body}} pageInfo{hasNextPage endCursor}}}}}' -F owner="$REPO_OWNER" -F name="$REPO_NAME" -F n="$PR_NUM" -F endCursor=null \
   --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved==false) | {threadId:.id, commentDbId:.comments.nodes[0].databaseId, author:.comments.nodes[0].author.login, path, line}'
 
 # Reply to the comment (databaseId), THEN resolve the thread (node id)
-env -u GITHUB_TOKEN gh api "repos/OWNER/REPO/pulls/PR_NUM/comments/COMMENT_DB_ID/replies" -f body="Fixed in <sha>. <what changed>"
+env -u GITHUB_TOKEN gh api "repos/${REPO}/pulls/${PR_NUM}/comments/${COMMENT_DB_ID}/replies" -f body="Fixed in <sha>. <what changed>"
 env -u GITHUB_TOKEN gh api graphql -f query='mutation($t:ID!){resolveReviewThread(input:{threadId:$t}){thread{isResolved}}}' -F t=THREAD_NODE_ID --jq '.data.resolveReviewThread.thread.isResolved'
 ```
 
@@ -441,7 +460,7 @@ After each push, poll until the reviewers have weighed in on the **new** commit 
 
 ```bash
 # The single merge-readiness signal: unresolved review threads
-env -u GITHUB_TOKEN gh api graphql -f query='query($n:Int!){repository(owner:"OWNER",name:"REPO"){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved}}}}}' -F n=PR_NUM \
+env -u GITHUB_TOKEN gh api graphql --paginate -f query='query($owner:String!,$name:String!,$n:Int!,$endCursor:String){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){nodes{isResolved} pageInfo{hasNextPage endCursor}}}}}' -F owner="$REPO_OWNER" -F name="$REPO_NAME" -F n="$PR_NUM" -F endCursor=null \
   --jq '[.data.repository.pullRequest.reviewThreads.nodes[]|select(.isResolved==false)]|length'
 ```
 
@@ -462,9 +481,9 @@ Report the final unresolved count and CI state explicitly. If a new comment arri
 When multiple comments exist, batch related fixes:
 
 ```bash
-# Group by file (includes CodeRabbit, Copilot, and github-actions bot)
-gh api "repos/${REPO}/pulls/${PR_NUM}/comments" \
-  --jq '.[] | select(.user.login | test("coderabbit|copilot|github-actions"; "i")) | .path' \
+# Group every unresolved GitHub review thread by file, regardless of author.
+env -u GITHUB_TOKEN gh api graphql --paginate -f query='query($owner:String!,$name:String!,$n:Int!,$endCursor:String){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){nodes{isResolved path} pageInfo{hasNextPage endCursor}}}}}' -F owner="$REPO_OWNER" -F name="$REPO_NAME" -F n="$PR_NUM" -F endCursor=null \
+  --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | .path' \
   | sort | uniq -c | sort -rn
 ```text
 
