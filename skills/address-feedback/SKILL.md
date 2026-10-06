@@ -63,6 +63,8 @@ if [ -z "$PR_NUM" ] || [ "$PR_NUM" = "null" ]; then
 fi
 
 REPO=$(gh repo view --json nameWithOwner --jq '.nameWithOwner')
+REPO_OWNER=${REPO%/*}
+REPO_NAME=${REPO#*/}
 ```
 
 **If no PR exists:** Ask the user which PR to address, or if they want to create one first.
@@ -93,7 +95,7 @@ This is the authoritative GitHub fetch. Retrieve **every unresolved review threa
 # Fetch every unresolved GitHub review thread with its full conversation.
 # A prior reply (including "I'll look at this") does NOT mean the feedback is handled:
 # triage every thread returned here until it is explicitly resolved.
-env -u GITHUB_TOKEN gh api graphql -f query='query($n:Int!){repository(owner:"OWNER",name:"REPO"){pullRequest(number:$n){reviewThreads(first:100){nodes{id isResolved path line comments(first:100){nodes{databaseId author{login} body createdAt}}}}}}}' -F n="$PR_NUM" \
+env -u GITHUB_TOKEN gh api graphql --paginate -f query='query($owner:String!,$name:String!,$n:Int!,$endCursor:String){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){nodes{id isResolved path line comments(first:100){nodes{databaseId author{login} body createdAt}}} pageInfo{hasNextPage endCursor}}}}}' -F owner="$REPO_OWNER" -F name="$REPO_NAME" -F n="$PR_NUM" -F endCursor=null \
   --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | {threadId:.id, path, line, comments:[.comments.nodes[] | {databaseId, author:.author.login, body, createdAt}]}'
 ```
 
@@ -444,11 +446,11 @@ Replying via `.../comments/{id}/replies` does **not** resolve the thread. Resolv
 
 ```bash
 # Fetch unresolved threads WITH their node id + first comment databaseId
-env -u GITHUB_TOKEN gh api graphql -f query='query($n:Int!){repository(owner:"OWNER",name:"REPO"){pullRequest(number:$n){reviewThreads(first:100){nodes{id isResolved path line comments(first:1){nodes{databaseId author{login} body}}}}}}}' -F n=PR_NUM \
+env -u GITHUB_TOKEN gh api graphql --paginate -f query='query($owner:String!,$name:String!,$n:Int!,$endCursor:String){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){nodes{id isResolved path line comments(first:1){nodes{databaseId author{login} body}} pageInfo{hasNextPage endCursor}}}}}' -F owner="$REPO_OWNER" -F name="$REPO_NAME" -F n="$PR_NUM" -F endCursor=null \
   --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved==false) | {threadId:.id, commentDbId:.comments.nodes[0].databaseId, author:.comments.nodes[0].author.login, path, line}'
 
 # Reply to the comment (databaseId), THEN resolve the thread (node id)
-env -u GITHUB_TOKEN gh api "repos/OWNER/REPO/pulls/PR_NUM/comments/COMMENT_DB_ID/replies" -f body="Fixed in <sha>. <what changed>"
+env -u GITHUB_TOKEN gh api "repos/${REPO}/pulls/${PR_NUM}/comments/${COMMENT_DB_ID}/replies" -f body="Fixed in <sha>. <what changed>"
 env -u GITHUB_TOKEN gh api graphql -f query='mutation($t:ID!){resolveReviewThread(input:{threadId:$t}){thread{isResolved}}}' -F t=THREAD_NODE_ID --jq '.data.resolveReviewThread.thread.isResolved'
 ```
 
@@ -458,7 +460,7 @@ After each push, poll until the reviewers have weighed in on the **new** commit 
 
 ```bash
 # The single merge-readiness signal: unresolved review threads
-env -u GITHUB_TOKEN gh api graphql -f query='query($n:Int!){repository(owner:"OWNER",name:"REPO"){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved}}}}}' -F n=PR_NUM \
+env -u GITHUB_TOKEN gh api graphql --paginate -f query='query($owner:String!,$name:String!,$n:Int!,$endCursor:String){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){nodes{isResolved} pageInfo{hasNextPage endCursor}}}}}' -F owner="$REPO_OWNER" -F name="$REPO_NAME" -F n="$PR_NUM" -F endCursor=null \
   --jq '[.data.repository.pullRequest.reviewThreads.nodes[]|select(.isResolved==false)]|length'
 ```
 
@@ -480,7 +482,7 @@ When multiple comments exist, batch related fixes:
 
 ```bash
 # Group every unresolved GitHub review thread by file, regardless of author.
-env -u GITHUB_TOKEN gh api graphql -f query='query($n:Int!){repository(owner:"OWNER",name:"REPO"){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved path}}}}}' -F n="$PR_NUM" \
+env -u GITHUB_TOKEN gh api graphql --paginate -f query='query($owner:String!,$name:String!,$n:Int!,$endCursor:String){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100,after:$endCursor){nodes{isResolved path} pageInfo{hasNextPage endCursor}}}}}' -F owner="$REPO_OWNER" -F name="$REPO_NAME" -F n="$PR_NUM" -F endCursor=null \
   --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | .path' \
   | sort | uniq -c | sort -rn
 ```text
